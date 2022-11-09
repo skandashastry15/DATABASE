@@ -1,0 +1,92 @@
+create database insurance;
+use insurance;
+create table person(
+driver_id varchar(10) primary key,
+name char(30),
+address varchar(25)
+); 
+desc person;
+
+create table car(
+reg_num varchar(10) primary key,
+model char(20),
+year int(4)
+);
+
+desc car;
+
+create table owns(
+driver_id varchar(10),
+reg_num varchar(10),
+foreign key(driver_id) references person(driver_id),
+foreign key(reg_num) references car(reg_num)
+);
+
+create table accidemt(
+report_num varchar(10) primary key,
+accident_date date,
+location varchar(50));
+
+alter table owns
+add constraint primary key(driver_id,reg_num);
+
+create table participated(
+driver_id varchar(10),
+reg_num varchar(10),
+report_num varchar(10),
+damage_amount int(5),
+primary key(driver_id,reg_num,report_num),
+foreign key(report_num) references accidemt(report_num)
+);
+
+desc participated;
+
+alter table participated
+add constraint foreign key(reg_num) references car(reg_num);
+
+insert into person values('a1','john','bengaluru');
+insert into person values('b2','hs','mumbai');
+insert into person values('c3','ss','bengaluru');
+insert into person values('d4','sh','delhi');
+insert into person values('e5','mm','chennai');
+
+select * from person;
+
+insert into car values('KA10','ciaz','2019');
+insert into car values('MH23','fortuner','2018');
+insert into car values('KA43','honda city','2016');
+insert into car values('DE29','innova',2011);
+insert into car values('TN20','mercedes',2020);
+
+select * from car;
+
+insert into owns values('a1','KA10');
+insert into owns values('b2','MH23');
+insert into owns values('c3','KA43');
+insert into owns values('d4','DE29');
+insert into owns values('e5','TN20');
+
+select * from owns;
+
+rename table accidemt to accident;
+
+insert into accident values('1a','22-06-21','nice road');
+insert into accident values('2b','18-01-20','nice road');
+insert into accident values('3c','21-09-2','hanumanthnagar');
+insert into accident values('4d','22-01-12','nh47');
+insert into accident values('5e','21-06-03','mysore road');
+
+select * from accident;
+
+insert into participated values('a1','KA10','1a',25000);
+insert into participated values('b2','MH23','2b',12345);
+insert into participated values('c3','KA43','3c',3476);
+insert into participated values('d4','DE29','4d',2364);
+insert into participated values('e5','TN20','5e',5789);
+
+select * from participated;
+
+/*ToDo*/
+
+select accident_date , location from accident; 
+select * from participated where damage_amount >=10000;

@@ -1,0 +1,27 @@
+select * from participated
+order by damage_amount desc;
+
+
+select avg(damage_amount) as 'average' from participated;
+
+select driver_id from participated
+where damage_amount < (select avg(damage_amount) from participated);
+
+delete from participated 
+where damage_amount < (select * from (select avg(damage_amount) amt from participated)t);
+select * from participated;
+
+
+select p.name from person p,participated pa
+where p.driver_id = pa.driver_id and pa.damage_amount > (select avg(pa.damage_amount) from participated pa);
+
+select max(damage_amount) as 'maximum' from participated;
+
+select * from car
+order by year asc;
+
+select count(report_num) from car c, participated p
+where c.reg_num = p.reg_num and c.model='lancer';
+
+select count(distinct driver_id) from participated p,accident a
+where p.report_num = a.report_num and a.accident_date like '201%';

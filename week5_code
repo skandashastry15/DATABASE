@@ -1,0 +1,113 @@
+CREATE DATABASE company1;
+USE company1;
+CREATE TABLE project(
+	p_no INT,
+    p_name VARCHAR(20),
+    p_loc VARCHAR(20),
+    PRIMARY KEY(p_no)
+);
+CREATE TABLE dept(
+	dept_no INT,
+	d_name VARCHAR(20),
+    d_loc VARCHAR(20),
+    PRIMARY KEY(dept_no)
+);
+CREATE TABLE employee(
+	emp_no INT,
+    e_name VARCHAR(20),
+    mgr_no INT,
+    hire_date DATE,
+    sal INT,
+    dept_no INT,
+    PRIMARY KEY(emp_no),
+    FOREIGN KEY(dept_no) REFERENCES dept(dept_no) ON DELETE CASCADE
+);
+CREATE TABLE incentives(
+	emp_no INT,
+    incentive_date DATE,
+    incentive_amount INT,
+    PRIMARY KEY(emp_no,incentive_date),
+    FOREIGN KEY(emp_no) REFERENCES employee(emp_no) ON DELETE CASCADE
+);
+
+CREATE TABLE assigned_to(
+	emp_no INT,
+    p_no INT,
+    job_role VARCHAR(20),
+    PRIMARY KEY(emp_no,p_no),
+    FOREIGN KEY(emp_no) REFERENCES employee(emp_no) ON DELETE CASCADE,
+    FOREIGN KEY(p_no) REFERENCES project(p_no) ON DELETE CASCADE
+);
+
+INSERT INTO dept VALUES
+("1","Railway","Bangalore"),
+("2","Airways","Hyderabad"),
+("3","Roadwys","Mysore"),
+("4","Waterways","Andaman"),
+("5","Drainage","Bombay"),
+("6","Pollution","Delhi");
+
+INSERT INTO project VALUES
+("1","Lalbhagh","Bangalore"),
+("2","Sarojini nagar","Delhi"),
+("3","Tiruvananth","Chennai"),
+("4","India gate","Bombay"),
+("5","Presidency","Mangalore"),
+("6","Church","Goa"),
+("7","Pink","Jaipur"),
+("8","Taj","Agra");
+
+
+INSERT INTO employee VALUES
+("10","HS","101",'2015-12-1',"25000","2"),
+("11","MM","102",'2013-1-12',"10000","3"),
+("12","SUHAS","12",'2013-10-20',"100000","6"),
+("13","VISHWAS","141",'2021-3-23',"2200","5"),
+("14","VINAYAK","12",'2019-9-15',"39000","1"),
+("15","UJWAL","12",'2011-8-3',"70000","4"),
+("16","SKANDA","007",'2021-5-6',"30000","1"),
+("17","KARANJI","1007",'2016-4-13',"19000","2");
+
+INSERT INTO incentives VALUES
+("13",'2021-11-5',"2000"),
+("11",'2019-1-21',"3000"),
+("14",'2020-10-15',"9000"),
+("15",'2015-11-15',"7000"),
+("15",'2021-11-5',"1000");
+
+INSERT INTO assigned_to VALUES
+("10","2","Architect"),
+("17","2","Civil Engineer"),
+("11","3","Developer"),
+("13","1","Android"),
+("13","3","Website"),
+("14","3","Financial"),
+("15","6","Sales dept"),
+("10","4","Team Head"),
+("15","5","Testing"),
+("14","1","Cloud"),
+("11","7","Dev ops"),
+("10","8","Data Science");
+
+select * from project;
+select * from dept;
+select * from employee;
+select * from incentives;
+select * from assigned_to;
+
+
+SELECT DISTINCT e.emp_no,e.e_name
+FROM employee e,assigned_to a,project p
+WHERE e.emp_no=a.emp_no AND a.p_no=p.p_no AND p.p_loc IN("Bangalore","Bombay","Mysore");
+
+SELECT DISTINCT e.emp_no
+FROM employee e,incentives i
+WHERE e.emp_no NOT IN(SELECT i.emp_no FROM incentives i);
+
+SELECT DISTINCT e.e_name,e.emp_no,e.dept_no,a.job_role,d.d_loc,p.p_loc
+FROM employee e,dept d,assigned_to a,project p
+WHERE d.dept_no=e.dept_no AND e.emp_no=a.emp_no AND a.p_no=p.p_no AND p.p_loc=d.d_loc;
+
+select distinct e.e_name,d.dept_no,a.job_role from employee e, dept d, assigned_to a,incentives i
+where d.dept_no = e.dept_no and e.emp_no = a.emp_no and i.emp_no = a.emp_no and i.incentive_amount = 
+(select max(i.incentive_amount) from incentives i where i.incentive_date between '2021-1-1' and '2021-12-31' );

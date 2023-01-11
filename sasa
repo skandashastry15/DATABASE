@@ -1,0 +1,49 @@
+create database activity;
+use activity;
+create table faculty(
+fac_id int,
+department varchar(20),
+dept_conc varchar(10) ,
+name varchar(20),
+mob_no varchar(10),
+hod_id int,
+primary key(fac_id));
+alter table student
+add column parent_name varchar(20);
+desc student;
+create table student(
+usn int,
+name varchar(20),
+email varchar(20),
+fac_id int,
+department varchar(20),
+mob_no varchar(10),
+hod_id int,
+sem int,
+primary key(usn,fac_id),
+foreign key(fac_id) references faculty(fac_id));
+create table meeting(
+sl_no int,
+date date,
+outcome varchar(20),
+purpose varchar(20),
+usn int,
+fac_id int,
+primary key(sl_no,usn,fac_id),
+foreign key(usn) references student(usn),
+foreign key(fac_id) references faculty(fac_id));
+create table activity(
+act_conducted varchar(20),
+organisation varchar(20),
+type varchar(20),
+address varchar(20));
+create table activity_pts(
+fac_id int,
+act_name varchar(20),
+sem int,
+date date,
+pts int,
+loc varchar(20),
+duration time,
+primary key(fac_id),
+foreign key(fac_id) references faculty(fac_id));

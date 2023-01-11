@@ -1,0 +1,90 @@
+create database meal1;
+use meal1;
+
+create table customer(
+cust_id int primary key,
+cust_name varchar(25));
+
+create table meals(
+meal_id int primary key,
+name varchar(25),
+price int);
+
+create table orders(
+cust_id int,
+order_id int,
+meal_id int,
+primary key(cust_id,meal_id,order_id),
+phone_no int,
+address varchar(50),
+t_price int,
+order_time varchar(20));
+
+create table recipionist(
+r_id int primary key,
+r_name varchar(25));
+
+create table outlet(
+outlet_id int,
+r_id int,
+primary key(outlet_id,r_id),
+foreign key(r_id) references recipionist(r_id),
+outlet_loc varchar(25));
+
+create table driver(
+driver_id int primary key,
+d_name varchar(25),
+d_location varchar(10),
+availability varchar(10),
+driver_status varchar(10),
+driver_phone int(10) not null);
+
+
+create table delivery_details(
+order_id int, 
+driver_id int,
+pickup_status varchar(25),
+delivery_status varchar(25),
+payment int,
+primary key(driver_id,order_id),
+foreign key(driver_id) references driver(driver_id));
+
+create table ratings(
+order_id int primary key,
+score int,
+remarks varchar(25)
+);
+
+insert into meals values
+(1,'roti',40),(2,'curry',70),(3,'pizza',140);
+
+insert into customer values
+(10,'aaa'),(20,'bbb'),(30,'ccc');
+
+insert into orders values
+(10,230,1,'91234232','basvangudi',40,'6:00pm'),
+(10,230,2,'91234230','basvangudi',60,'6:00pm'),
+(20,231,3,'91234330','RR nagar',140,'10:00am'),
+(30,232,1,'12445673','vijayanagar',40,'2:00pm');
+
+insert into recipionist values
+(01,'abc'),(02,'def'),(03,'ghi');
+
+insert into outlet values
+(001,01,'national college'),(002,02,'basvangudi');
+
+insert into driver values
+(111,'her','tr mill','available','delivering',126890),
+(222,'him','RR nagar','available','delivering',1235667788);
+
+insert into delivery_details values
+(230,111,'picked','undelivered','0'),
+(231,111,'picked','delivered','140'),
+(232,222,'picked','undelivered','0');
+
+insert into delivery_details values
+(233,111,'picked','delivered','10');
+insert into ratings values
+(231,5,'good food');
+
+select * from delivery_details;

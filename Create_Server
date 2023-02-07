@@ -1,0 +1,5 @@
+create user <'username'> identified by <'password'>;
+GRANT ALL PRIVILEGES ON *.* TO <'username'>@'%' WITH GRANT OPTION;
+
+create user 'skandashastry' identified by 'skanda7315';
+GRANT ALL PRIVILEGES ON *.* TO 'skandashastry'@'%' WITH GRANT OPTION;
